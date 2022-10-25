@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
-
+//LoginSuccessHandler - хэндлер, содержащий в себе алгоритм действий при успешной аутентификации.
+// Например, тут мы можем отправить пользователя с ролью админа на админку после логина,
+// а с ролью юзер на главную страницу сайта и т.п.
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
     // Spring Security использует объект Authentication, пользователя авторизованной сессии.
