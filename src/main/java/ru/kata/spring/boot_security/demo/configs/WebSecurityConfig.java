@@ -1,52 +1,80 @@
 package ru.kata.spring.boot_security.demo.configs;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import ru.kata.spring.boot_security.demo.services.UserService;
 
-//WebSecurityConfig - ГЛАВНЫЙ КЛАСС ГДЕ НАСТРАИВАЕТСЯ SPRING SECURITY.
+//<<<<<<<<<<<<<<<<<<<<<<<ГЛАВНЫЙ КЛАСС ГДЕ НАСТРАИВАЕТСЯ SPRING SECURITY.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 //Происходит настройка секьюрности по определенным URL,
 // а также настройка UserDetails и GrantedAuthority.
-@Configuration// не обязательно указывать
+
+
+@Configuration
 @EnableWebSecurity  //Аннотация дает понять что это конфигурационный класс для SPRING SECURITY.
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {// Настраиваем части безопасности
+
+    private UserService userService;
+
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+//=====================ПЕРЕКИДЫВАЕТ ЮЗЕРОВ ПО НУЖНЫМ АДРЕСАМ ПОСЛЕ ВХОДА=========================================
     private final SuccessUserHandler successUserHandler;
 
     public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+
         this.successUserHandler = successUserHandler;
     }
-//<<<<<<<<<<<<<<<<<<<<configure>>>>>>>>>>>>>>>>>>>>>>>
-    @Override// конфигурируем сам Spring Security Авторизацию
+//==========================Шифрование паролей====================================
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return  new BCryptPasswordEncoder();
+    }
+
+
+//==================== Конфигурируем Spring Security Авторизацию =========================================
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()//запрашивается авторизация для определенных URL
-                .antMatchers("/", "/index").permitAll()//кто может видеть страницу .hasAnyRole()
+                .authorizeRequests()//все запросы будут проходить через авторизацию
+                .antMatchers("/", "/index").permitAll()//на эти страницы пускаем всех
+                //.antMatchers("/admin/**").hasRole("ADMIN")//ВХОД ТОЛЬКО АДМИНУ
                 .anyRequest().authenticated()//на все остальные запросы нужна авторизация
                 .and()// and соединяет различающиеся по логике настройки, следом настраивается страница логина
-                .formLogin().successHandler(successUserHandler)//ЛОГИН И ПАРОЛЬ ЗАПРАШИВАЕТСЯ У ВСЕХ
+                .formLogin().successHandler(successUserHandler)//УКАЗЫВАЕМ НАПРАВЛЕНИЕ ПОСЛЕ РЕГИСТРАЦИИ
                 .permitAll()
                 .and()
-                .logout()
+                .logout() //.logoutSuccessUrl("/") //после logout переводит в корень
                 .permitAll();
     }
 
-    // аутентификация inMemory
+//============СВЕРЯЕТ ДАННЫЕ, отдаем ему логины и пароли, его задача сказать существует ли такой юзер или нет.
     @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("user")
-                        .roles("USER")
-                        .build();
-//Измените настройку секьюрности с inMemory на userDetailService.
-        return new InMemoryUserDetailsManager(user);
+    public DaoAuthenticationProvider authenticationProvider(){
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setPasswordEncoder(passwordEncoder());  // расшифровка паролей, преобр к хэшу и сравнивает
+        authenticationProvider.setUserDetailsService(userService);    //по имени юзера достает его из базы
+
+
+        return authenticationProvider;
     }
+
+
+
+//==============================================================
 }
