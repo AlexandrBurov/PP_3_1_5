@@ -8,11 +8,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class User implements UserDetails{
     //=========================================
     @Id
@@ -21,16 +20,16 @@ public class User implements UserDetails{
     private int id;
 
     //----------------------------------------
-    @Column(name = "name")
+    @Column(name = "firstname")
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
-    private String name;
+    private String firstname;
 
     //----------------------------------------
-    @Column(name = "surname")
+    @Column(name = "lastname")
     @NotEmpty(message = "Surname should not be empty")
     @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters")
-    private String surname;
+    private String lastname;
 
     //----------------------------------------
     @Column(name = "age")
@@ -44,33 +43,41 @@ public class User implements UserDetails{
     @Email(message = "Email should be valid")
     private String email;
 
-    //=========================================
+//==================   USERNAME AND PASSWORD   =============================
+
+    @Column(name = "username")
+    @NotEmpty(message = "Name should not be empty")
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    private String username;
 
     @Column(name = "password")
     private String password;
 
-    //=========================================
+//======================================================================
 
-    @ManyToMany(fetch = FetchType.EAGER)//«жадная» загрузка, т.е. список ролей загружается
-    // вместе с пользователем сразу (не ждет пока к нему обратятся).
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private List <Role> roles;
 
-    //=========================================
+//====================================================================
 
     public User(){}
 
-    public User(int id, String name, String surname, int age, String email, String password, Set<Role> roles) {
+    public User(int id, String firstname, String lastname, int age, String email, String username,String password) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.age = age;
         this.email = email;
+
+
+        this.username = username;
         this.password = password;
-        this.roles = roles;
+
     }
 
     //===========================================
@@ -83,20 +90,20 @@ public class User implements UserDetails{
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public int getAge() {
@@ -115,21 +122,33 @@ public class User implements UserDetails{
         this.email = email;
     }
 
+//=============================================
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public void setPassword(String password) {
         this.password = password;
     }
+
 //====================ROLE====================
-    public Set<Role> getRoles() {
+    public List <Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List <Role> roles) {
         this.roles = roles;
     }
 
-    public void addRole(Role role) {
-        this.roles.add(role);
+    public void addRoleToUser(Role role) {
+
+        if(roles == null) {
+
+            roles = new ArrayList<>();
+        }
+
+        roles.add(role);
     }
 
 //<<<<<<<<<<<<<<<<<<<<UserDetails>>>>>>>>>>>>>>>>>>>>
@@ -143,7 +162,7 @@ public class User implements UserDetails{
     @Override
     public String getUsername() {
 
-        return name;
+        return username;
     }
 
     public String getPassword() {
@@ -171,7 +190,6 @@ public class User implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
-    //==============================================
 
-
+//=========================================================
 }

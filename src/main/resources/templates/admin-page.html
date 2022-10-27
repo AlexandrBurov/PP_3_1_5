@@ -24,11 +24,13 @@
 
     <tr th:each="user : ${users}">
         <td th:utext="${user.id}">brand</td>
-        <td th:utext="${user.name}">color</td>
-        <td th:utext="${user.surname}">power</td>
+        <td th:utext="${user.firstname}">color</td>
+        <td th:utext="${user.lastname}">power</td>
         <td th:utext="${user.age}">power</td>
         <td th:utext="${user.email}">power</td>
         <td th:utext="${user.roles}">power</td>
+        <td th:utext="${user.username}">power</td>
+        <td th:utext="${user.password}">power</td>
         <td><a th:href="@{/users/{id}/edit(id=${user.getId()})}">Edit</a></td>
 
         <td><a th:method="DELETE" th:href="@{/users/{id}(id=${user.getId()})}">Delete

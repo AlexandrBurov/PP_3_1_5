@@ -25,53 +25,48 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 @EnableWebSecurity  //Аннотация дает понять что это конфигурационный класс для SPRING SECURITY.
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {// Настраиваем части безопасности
 
-    private UserService userService;
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
 
 //=====================ПЕРЕКИДЫВАЕТ ЮЗЕРОВ ПО НУЖНЫМ АДРЕСАМ ПОСЛЕ ВХОДА=========================================
+    private final UserService userService;
     private final SuccessUserHandler successUserHandler;
 
-    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService) {
 
         this.successUserHandler = successUserHandler;
+
+        this.userService = userService;
     }
 //==========================Шифрование паролей====================================
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return  new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
-
-
 //==================== Конфигурируем Spring Security Авторизацию =========================================
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests()//все запросы будут проходить через авторизацию
-                .antMatchers("/", "/index").permitAll()//на эти страницы пускаем всех
-                //.antMatchers("/admin/**").hasRole("ADMIN")//ВХОД ТОЛЬКО АДМИНУ
-                .anyRequest().authenticated()//на все остальные запросы нужна авторизация
-                .and()// and соединяет различающиеся по логике настройки, следом настраивается страница логина
+
+                .authorizeRequests()
+                .antMatchers("/").authenticated()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .and()
                 .formLogin().successHandler(successUserHandler)//УКАЗЫВАЕМ НАПРАВЛЕНИЕ ПОСЛЕ РЕГИСТРАЦИИ
                 .permitAll()
                 .and()
-                .logout() //.logoutSuccessUrl("/") //после logout переводит в корень
+                .logout()
                 .permitAll();
     }
 
-//============СВЕРЯЕТ ДАННЫЕ, отдаем ему логины и пароли, его задача сказать существует ли такой юзер или нет.
+//============СВЕРЯЕТ ДАННЫЕ, проверяет по логину и паролю существует ли такой пользователь ============
+
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(passwordEncoder());  // расшифровка паролей, преобр к хэшу и сравнивает
-        authenticationProvider.setUserDetailsService(userService);    //по имени юзера достает его из базы
-
-
-        return authenticationProvider;
+    public DaoAuthenticationProvider daoAuthenticationProvider() {  //проверяет по логину и паролю существует ли такой пользователь
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(userService);  //Предоставляет пользователей из userService (по имени пользователя)
+        return provider;
     }
 
 

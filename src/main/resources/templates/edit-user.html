@@ -8,16 +8,16 @@
 <body>
 
 <form th:method="PATCH" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
-    <label for="name">Enter name: </label>
-    <input type="text" th:field="*{name}" id="name"/>
+    <label for="firstname">Enter firstname: </label>
+    <input type="text" th:field="*{firstname}" id="firstname"/>
 
-    <div style="color:red" th:if="${#fields.hasErrors('name') }" th:errors="*{name}">Name error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('firstname') }" th:errors="*{firstname}">firstname error</div>
 
     <br/>
-    <label for="surname">Enter surname: </label>
-    <input type="text" th:field="*{surname}" id="surname"/>
+    <label for="lastname">Enter lastname: </label>
+    <input type="text" th:field="*{lastname}" id="lastname"/>
 
-    <div style="color:red" th:if="${#fields.hasErrors('surname') }" th:errors="*{surname}">Surname error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('lastname') }" th:errors="*{lastname}">lastname error</div>
 
     <br/>
     <label for="age">Enter age: </label>
@@ -30,6 +30,12 @@
     <label for="email">Enter email: </label>
     <input type="text" th:field="*{email}" id="email"/>
     <div style="color:red" th:if="${#fields.hasErrors('email') }" th:errors="*{email}">Age error</div>
+
+    <br/>
+
+    <label for="username">Enter username: </label>
+    <input type="text" th:field="*{username}" id="username"/>
+    <div style="color:red" th:if="${#fields.hasErrors('username') }" th:errors="*{username}">username error</div>
 
     <br/>
 
