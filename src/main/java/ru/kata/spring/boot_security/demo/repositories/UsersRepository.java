@@ -54,9 +54,6 @@ public class UsersRepository {
     @Transactional
     public User update(User user) {
 
-//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//        user.setPassword(encoder.encode(user.getPassword()));
-
         return entityManager.merge(user);
     }
 //=========================getAllUsers=================
