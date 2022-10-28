@@ -1,12 +1,9 @@
 package ru.kata.spring.boot_security.demo.repositories;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
@@ -15,9 +12,8 @@ import ru.kata.spring.boot_security.demo.models.User;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+
 
 
 @Repository
@@ -32,7 +28,7 @@ public class UsersRepository {
         this.entityManager = entityManager;
         this.roleRepository = roleRepository;
     }
-    //==================================================================
+//====================================================
     @Transactional
     public User findByUsername(String username) throws UsernameNotFoundException  {
         TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :name", User.class);
@@ -44,7 +40,7 @@ public class UsersRepository {
         user.getRoles().size();
         return user;
     }
-    //=====================================================
+//=====================================================
     @Transactional
     public void save(User user) {
 
@@ -54,8 +50,7 @@ public class UsersRepository {
         user.addRoleToUser(roleUser);
         entityManager.persist(user);
     }
-
-    //=====================================================
+//=====================================================
     @Transactional
     public User update(User user) {
 
@@ -64,8 +59,7 @@ public class UsersRepository {
 
         return entityManager.merge(user);
     }
-
-    //=========================getAllUsers============================
+//=========================getAllUsers=================
     public List<User> findAll() {
         String jpql = "SELECT u FROM User u";
 
@@ -73,20 +67,18 @@ public class UsersRepository {
 
         return query.getResultList();
     }
-    //=======================getUserById==============================
+//=======================getUserById===================
     public User findById(int id) {
+
         return entityManager.find(User.class, id);
     }
-
 //=====================================================
-
     @Transactional
     public void deleteById(int contactId) {
         User user = entityManager.find(User.class, contactId);
         entityManager.remove(user);
     }
-
-    //=====================================================
+//=====================================================
     public Role findRoleByRoleName(String name) {
         TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
         query.setParameter("name", name);

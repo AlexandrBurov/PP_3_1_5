@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <style>table th, table td {padding: 5px;}</style>
+
+    <h1>User <td th:utext="${user.username}">brand</td> page </h1>
+
+    <br/>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+
+    <br/>
+
+
+</head>
+<body>
+
+<table border="1">
+    <tr>
+        <th>Id</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Username</th>
+        <th>Password</th>
+
+
+    </tr>
+
+
+        <td th:utext="${user.id}">brand</td>
+        <td th:utext="${user.firstname}">power</td>
+        <td th:utext="${user.lastname}">power</td>
+        <td th:utext="${user.age}">power</td>
+        <td th:utext="${user.email}">power</td>
+        <td th:utext="${user.roles}">power</td>
+        <td th:utext="${user.username}">power</td>
+        <td th:utext="${user.password}">power</td>
+
+
+    </tr>
+
+
+</table>
+
+<br/>
+
+</body>
+</html>

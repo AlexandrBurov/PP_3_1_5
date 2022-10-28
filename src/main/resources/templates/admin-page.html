@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <title>Index</title>
     <style>table th, table td {padding: 5px;}</style>
+    <h1>All Users</h1>
+
+    <br/>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+
+    <br/>
 </head>
 <body>
-
-<h1>All Users</h1>
 
 <table border="1">
     <tr>
@@ -17,8 +24,8 @@
         <th>Age</th>
         <th>Email</th>
         <th>Role</th>
-        <th>username</th>
-        <th>password</th>
+        <th>Username</th>
+        <th>Password</th>
         <th>Edit</th>
         <th>Delete</th>
 
@@ -35,20 +42,17 @@
         <td th:utext="${user.password}">power</td>
         <td><a th:href="@{/admin/{id}/edit(id=${user.getId()})}">Edit</a></td>
 
-        <td><a th:method="DELETE" th:href="@{/admin/{id}(id=${user.getId()})}">Delete
-        </a></td>
+        <td><a th:method="DELETE" th:href="@{/admin/{id}(id=${user.getId()})}">Delete</a></td>
 
     </tr>
-
 
 </table>
 
 <br/>
 
+<td><a th:href="@{/admin/new}">Create new user</a></td>
 
-<form action="/admin/new" target="_blank">
-    <button>New user</button>
-</form>
+<br/>
 
 </body>
 </html>

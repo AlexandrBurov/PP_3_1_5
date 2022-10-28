@@ -4,7 +4,18 @@
     <meta charset="UTF-8">
     <title>Update User</title>
 
+    <h1>Edit User</h1>
+
+    <br/>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+    </form>
+
+    <br/>
+
 </head>
+
 <body>
 
 <form th:method="PATCH" th:action="@{/admin/{id}(id=${user.getId()})}" th:object="${user}">
@@ -51,7 +62,7 @@
 
     <br/>
     <br/>
-    <input type="submit" value="Update!"/>
+    <input type="submit" value="Edit!"/>
 
 
 </form>

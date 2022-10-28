@@ -45,6 +45,7 @@ public class AdminController {
 
     @GetMapping("/new")
     public String newUser(@ModelAttribute("user") User user){  // @ModelAttribute помещает user без параметров
+
         return "add-new-user";}
 //==================================================================
 
@@ -61,6 +62,7 @@ public class AdminController {
     @PostMapping()
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult){
+
         if(bindingResult.hasErrors())
             return "add-new-user";
 

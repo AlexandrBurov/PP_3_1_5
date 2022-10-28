@@ -10,14 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,8 +26,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     public UserService(UsersRepository usersRepository) {
 
-        this.usersRepository = usersRepository;
-    }
+        this.usersRepository = usersRepository;}
 
 //==============================================================
 //                    loadUserByUsername
@@ -44,22 +41,18 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
-
 //==============================================================
-
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role>roles) {
 
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
-
 //=========================findUserById===========================
     public User findOne(int id){
         Optional<User> foundUser = Optional.ofNullable(usersRepository.findById(id));
 
-        return foundUser.orElse(new User());}
-
+        return foundUser.orElse(new User());
+    }
 //================================================================
-
     public List<User> findAll(){return usersRepository.findAll();}
 
 //==========================saveUser=============================
@@ -76,6 +69,5 @@ public class UserService implements UserDetailsService {
     public void delete(int id){
         usersRepository.deleteById(id);
     }
-
 //===============================================================
 }
