@@ -38,14 +38,14 @@ public class User implements UserDetails{
 
     //=========================================
 
-    @Column(name = "email")
+    @Column(unique = true)
     @NotEmpty(message = "email should not be empty")
     @Email(message = "Email should be valid")
     private String email;
 
 //==================   USERNAME AND PASSWORD   =============================
 
-    @Column(unique = true,name = "username")
+    @Column(unique = true)
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String username;
