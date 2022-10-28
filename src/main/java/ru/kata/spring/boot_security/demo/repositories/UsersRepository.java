@@ -25,13 +25,11 @@ import java.util.Set;
 public class UsersRepository {
     @PersistenceContext
     private final EntityManager entityManager;
-    final UsersRepository usersRepository;
-    final RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Lazy
-    public UsersRepository(EntityManager entityManager, UsersRepository usersRepository, RoleRepository roleRepository) {
+    public UsersRepository(EntityManager entityManager, RoleRepository roleRepository) {
         this.entityManager = entityManager;
-        this.usersRepository = usersRepository;
         this.roleRepository = roleRepository;
     }
     //==================================================================
@@ -46,7 +44,7 @@ public class UsersRepository {
         user.getRoles().size();
         return user;
     }
-//=====================================================
+    //=====================================================
     @Transactional
     public void save(User user) {
 
@@ -57,17 +55,17 @@ public class UsersRepository {
         entityManager.persist(user);
     }
 
-//=====================================================
+    //=====================================================
     @Transactional
     public User update(User user) {
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//        user.setPassword(encoder.encode(user.getPassword()));
 
         return entityManager.merge(user);
     }
 
-//=========================getAllUsers============================
+    //=========================getAllUsers============================
     public List<User> findAll() {
         String jpql = "SELECT u FROM User u";
 
@@ -75,7 +73,7 @@ public class UsersRepository {
 
         return query.getResultList();
     }
-//=======================getUserById==============================
+    //=======================getUserById==============================
     public User findById(int id) {
         return entityManager.find(User.class, id);
     }
@@ -88,11 +86,11 @@ public class UsersRepository {
         entityManager.remove(user);
     }
 
-//=====================================================
-public Role findRoleByRoleName(String name) {
-    TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
-    query.setParameter("name", name);
-    return query.getSingleResult();
-}
+    //=====================================================
+    public Role findRoleByRoleName(String name) {
+        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
+        query.setParameter("name", name);
+        return query.getSingleResult();
+    }
 //=====================================================
 }

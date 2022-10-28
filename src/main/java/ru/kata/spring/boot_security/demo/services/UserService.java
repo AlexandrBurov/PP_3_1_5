@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
@@ -21,64 +22,60 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
-public class UserService implements UserDetailsService { //UserDetailsService по имени юзера предоставить всего юзера
+public class UserService implements UserDetailsService {
 
-    private final RoleRepository roleRepository;
     private UsersRepository usersRepository;
     @Autowired
-    public UserService(UsersRepository usersRepository, RoleRepository roleRepository) {
+    public UserService(UsersRepository usersRepository) {
+
         this.usersRepository = usersRepository;
-        this.roleRepository = roleRepository;
     }
-
-//====================ALL<USER> ALL<ROLE>=======================
-
-    public List<User> findAll(){return usersRepository.findAll();}
-    public List<Role> getAllRoles() { return roleRepository.findAll(); }
 
 //==============================================================
-    public User findByUsername(String username){
-
-        return  usersRepository.findByUsername(username);
-    }
-
-//========================UserDetailsService======================================
-    // По имени пользователя возвращает его полностью с базы данных
+//                    loadUserByUsername
 
     @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) {
-
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = usersRepository.findByUsername(username);
-        return user;
 
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        return user;
     }
 
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//==============================================================
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role>roles) {
-        return roles.stream().map(r -> new SimpleGrantedAuthority(r.getName())).collect(Collectors.toList());
+
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
 
-//=========================findUserById=====================================
+//=========================findUserById===========================
     public User findOne(int id){
         Optional<User> foundUser = Optional.ofNullable(usersRepository.findById(id));
-        return foundUser.orElse(null);}
 
-//==========================saveUser====================================
+        return foundUser.orElse(new User());}
+
+//================================================================
+
+    public List<User> findAll(){return usersRepository.findAll();}
+
+//==========================saveUser=============================
     @Transactional
     public void save(User user){usersRepository.save(user);}
-//==============================================================
+//===============================================================
     @Transactional
     public void update(int id, User updateUser){
         updateUser.setId(id);
         usersRepository.update(updateUser);
     }
-//==============================================================
+//===============================================================
     @Transactional
     public void delete(int id){
         usersRepository.deleteById(id);
     }
 
-//==============================================================
+//===============================================================
 }

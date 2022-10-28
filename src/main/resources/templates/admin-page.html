@@ -17,6 +17,8 @@
         <th>Age</th>
         <th>Email</th>
         <th>Role</th>
+        <th>username</th>
+        <th>password</th>
         <th>Edit</th>
         <th>Delete</th>
 
@@ -24,16 +26,16 @@
 
     <tr th:each="user : ${users}">
         <td th:utext="${user.id}">brand</td>
-        <td th:utext="${user.firstname}">color</td>
+        <td th:utext="${user.firstname}">power</td>
         <td th:utext="${user.lastname}">power</td>
         <td th:utext="${user.age}">power</td>
         <td th:utext="${user.email}">power</td>
         <td th:utext="${user.roles}">power</td>
         <td th:utext="${user.username}">power</td>
         <td th:utext="${user.password}">power</td>
-        <td><a th:href="@{/users/{id}/edit(id=${user.getId()})}">Edit</a></td>
+        <td><a th:href="@{/admin/{id}/edit(id=${user.getId()})}">Edit</a></td>
 
-        <td><a th:method="DELETE" th:href="@{/users/{id}(id=${user.getId()})}">Delete
+        <td><a th:method="DELETE" th:href="@{/admin/{id}(id=${user.getId()})}">Delete
         </a></td>
 
     </tr>
@@ -44,7 +46,7 @@
 <br/>
 
 
-<form action="/users/new" target="_blank">
+<form action="/admin/new" target="_blank">
     <button>New user</button>
 </form>
 
