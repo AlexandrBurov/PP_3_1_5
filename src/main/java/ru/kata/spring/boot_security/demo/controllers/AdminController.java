@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
+import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 
 import javax.validation.Valid;
@@ -16,15 +17,20 @@ import javax.validation.Valid;
 @RequestMapping("/admin")
 public class AdminController {
 
+    private final UserValidator userValidator;
+
     private final UserService userService;
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, UserValidator userValidator) {
         this.userService = userService;
+
+
+        this.userValidator = userValidator;
     }
 
 //=====================@GetMapping==================================
 
-//            СТАРТОВАЯ СТРАНИЦА СО ВСЕМИ ЮЗЕРАМИ
+    //            СТАРТОВАЯ СТРАНИЦА СО ВСЕМИ ЮЗЕРАМИ
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("users", userService.findAll());
@@ -49,7 +55,7 @@ public class AdminController {
         return "add-new-user";}
 //==================================================================
 
-//           СТРАНИЦА ДЛЯ РЕДАКТИРОВАНИЯ ЮЗЕРА
+    //           СТРАНИЦА ДЛЯ РЕДАКТИРОВАНИЯ ЮЗЕРА
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id){
         model.addAttribute("user", userService.findOne(id));
@@ -58,10 +64,12 @@ public class AdminController {
 
 //====================@PostMapping===================================
 
-//               СОХРАНЕНИЕ ИЗМЕНЕНИЙ ЮЗЕРА
+    //               СОХРАНЕНИЕ ИЗМЕНЕНИЙ ЮЗЕРА
     @PostMapping()
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult){
+
+        userValidator.validate(user, bindingResult);
 
         if(bindingResult.hasErrors())
             return "add-new-user";
@@ -71,10 +79,13 @@ public class AdminController {
     }
 //====================@PatchMapping============================
 
-//                  ОБНОВЛЯЕМ ПОЛЯ ЮЗЕРА
+    //                  ОБНОВЛЯЕМ ПОЛЯ ЮЗЕРА
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @PathVariable("id") int id){
+
+        userValidator.validate(user, bindingResult);
+
         if(bindingResult.hasErrors())
             return "edit-user";
 
@@ -83,7 +94,7 @@ public class AdminController {
     }
 //====================@DeleteMapping============================
 
-//                   УДАЛЕНИЕ ЮЗЕРА
+    //                   УДАЛЕНИЕ ЮЗЕРА
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         userService.delete(id);

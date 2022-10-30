@@ -2,8 +2,8 @@ package ru.kata.spring.boot_security.demo.repositories;
 
 
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @Repository
@@ -21,7 +21,12 @@ import java.util.List;
 public class UsersRepository {
     @PersistenceContext
     private final EntityManager entityManager;
-    private RoleRepository roleRepository;
+
+    private final RoleRepository roleRepository;
+
+    public PasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
 
     @Lazy
     public UsersRepository(EntityManager entityManager, RoleRepository roleRepository) {
@@ -29,45 +34,47 @@ public class UsersRepository {
         this.roleRepository = roleRepository;
     }
 //====================================================
-    @Transactional
-    public User findByUsername(String username) throws UsernameNotFoundException  {
-        TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :name", User.class);
-        query.setParameter("name", username);
-        if (username == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        User user = query.getSingleResult();
-        user.getRoles().size();
-        return user;
+
+    public User findByUsername(String username) {
+
+        return entityManager.createQuery("select u FROM User u JOIn fETCH u.roles WHERe u.username = :username", User.class)
+                .setParameter("username", username)
+                .getResultList().stream().findAny().orElse(null);
     }
 //=====================================================
     @Transactional
     public void save(User user) {
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        user.setPassword(encoder.encode(user.getPassword()));
+        user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
         Role roleUser = findRoleByRoleName("ROLE_USER");
         user.addRoleToUser(roleUser);
         entityManager.persist(user);
+
     }
+
 //=====================================================
     @Transactional
-    public User update(User user) {
+    public User update(User user1) {
 
-        return entityManager.merge(user);
+        User user2 = findById(user1.getId());
+        if(!user2.getPassword().equals(user1.getPassword())) {
+            user1.setPassword(bCryptPasswordEncoder().encode(user2.getPassword()));
+        }
+
+        return entityManager.merge(user1);
     }
 //=========================getAllUsers=================
     public List<User> findAll() {
-        String jpql = "SELECT u FROM User u";
 
-        TypedQuery<User> query = entityManager.createQuery(jpql, User.class);
-
-        return query.getResultList();
+        return entityManager.createQuery("select s from User s", User.class).getResultList();
     }
 //=======================getUserById===================
     public User findById(int id) {
 
-        return entityManager.find(User.class, id);
+        Optional<User> foundUser = Optional.ofNullable(entityManager.find(User.class, id));
+
+        return foundUser.orElse(new User());
+
     }
 //=====================================================
     @Transactional
@@ -80,6 +87,18 @@ public class UsersRepository {
         TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
         query.setParameter("name", name);
         return query.getSingleResult();
+    }
+//=====================================================
+    public Optional<User> getUserByEmail (String email) {
+
+        TypedQuery<User> query = entityManager.createQuery
+                ("SELECT u FROM User u WHERE u.email = :email", User.class);
+
+        query.setParameter("email", email);
+
+        return query.getResultStream().findAny();
+
+
     }
 //=====================================================
 }

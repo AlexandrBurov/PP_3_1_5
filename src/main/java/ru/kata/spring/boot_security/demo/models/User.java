@@ -55,8 +55,7 @@ public class User implements UserDetails{
 
 //======================================================================
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -192,4 +191,5 @@ public class User implements UserDetails{
     }
 
 //=========================================================
+
 }
