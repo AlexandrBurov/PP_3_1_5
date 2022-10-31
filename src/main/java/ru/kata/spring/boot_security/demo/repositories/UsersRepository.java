@@ -22,8 +22,9 @@ public class UsersRepository {
 
     private final RoleRepository roleRepository;
 
-    public PasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(12);
+    public PasswordEncoder bCryptPasswordEncoder()
+    {
+        return new BCryptPasswordEncoder();
     }
 
     @Lazy

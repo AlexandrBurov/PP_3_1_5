@@ -36,7 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {// Наст
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+
+        return new BCryptPasswordEncoder();
     }
 
 //                   Конфигурируем Spring Security Авторизацию
