@@ -5,7 +5,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import javax.persistence.EntityManager;
@@ -46,8 +45,7 @@ public class UsersRepository {
     public void save(User user) {
 
         user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
-        Role roleUser = findRoleByRoleName("ROLE_USER");
-        user.addRoleToUser(roleUser);
+
         entityManager.persist(user);
 
     }
@@ -82,12 +80,9 @@ public class UsersRepository {
         User user = entityManager.find(User.class, contactId);
         entityManager.remove(user);
     }
-//=====================================================
-    public Role findRoleByRoleName(String name) {
-        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
-        query.setParameter("name", name);
-        return query.getSingleResult();
-    }
+
+
+
 //========================Optional<User> ================
     public Optional<User> getUserByEmail (String email) {
 
