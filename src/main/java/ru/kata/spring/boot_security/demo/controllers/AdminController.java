@@ -84,7 +84,7 @@ public class AdminController {
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @PathVariable("id") int id){
 
-//        userValidator.validate(user, bindingResult);
+        userValidator.validate(user, bindingResult);
 
         if(bindingResult.hasErrors())
             return "edit-user";
