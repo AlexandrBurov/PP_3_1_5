@@ -35,7 +35,7 @@ public class UserValidator  implements Validator {
 
         if (userService.findUserOptional(user.getUsername()).isPresent())
 
-            errors.rejectValue("Username", "", "This Username is already taken");
+            errors.rejectValue("username", "", "This Username is already taken");
 
 
     }
