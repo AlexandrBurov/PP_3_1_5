@@ -52,8 +52,13 @@
 
     <br/>
 
-    <label for="roles">Enter roles: </label>
-    <input type="text" th:field="*{roles}" id="roles"/>
+    <label >Enter roles: </label>
+
+    <input type="checkbox" id="user" name="roles" value="1" checked><label for="user"> User</label>
+
+    <input type="checkbox" id="admin" name="roles" value="2"><label for="admin"> Administrator</label>
+
+    
     <div style="color:red" th:if="${#fields.hasErrors('roles') }" th:errors="*{roles}">roles error</div>
 
     <br/>
