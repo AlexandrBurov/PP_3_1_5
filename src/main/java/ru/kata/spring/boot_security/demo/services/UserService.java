@@ -77,4 +77,9 @@ public Optional <User> getUserToEmail (String email) {
       return  usersRepository.getUserByEmail(email);
 }
 //===============================================================
+public Optional<User> findUserOptional(String username) {
+
+     return usersRepository.findUserOptional(username);
+    }
+//===============================================================
 }

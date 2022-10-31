@@ -98,7 +98,17 @@ public class UsersRepository {
 
         return query.getResultStream().findAny();
 
-
     }
+//=====================================================
+public Optional<User> findUserOptional(String username) {
+
+    TypedQuery<User> query = entityManager.createQuery
+                    ("SELECT u FROM User u WHERE u.username = :username", User.class);
+
+    query.setParameter("username", username);
+
+    return query.getResultStream().findAny();
+
+}
 //=====================================================
 }

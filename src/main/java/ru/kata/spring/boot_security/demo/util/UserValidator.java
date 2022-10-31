@@ -33,6 +33,11 @@ public class UserValidator  implements Validator {
 
             errors.rejectValue("email", "", "This email is already taken");
 
+        if (userService.findUserOptional(user.getUsername()).isPresent())
+
+            errors.rejectValue("Username", "", "This Username is already taken");
+
+
     }
 //=======================================================
 }
