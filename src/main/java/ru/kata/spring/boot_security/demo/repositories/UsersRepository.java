@@ -88,7 +88,7 @@ public class UsersRepository {
         query.setParameter("name", name);
         return query.getSingleResult();
     }
-//=====================================================
+//========================Optional<User> ================
     public Optional<User> getUserByEmail (String email) {
 
         TypedQuery<User> query = entityManager.createQuery
@@ -99,7 +99,7 @@ public class UsersRepository {
         return query.getResultStream().findAny();
 
     }
-//=====================================================
+
 public Optional<User> findUserOptional(String username) {
 
     TypedQuery<User> query = entityManager.createQuery
