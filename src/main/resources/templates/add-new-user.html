@@ -54,7 +54,7 @@
 
     <label for="roles">Enter roles: </label>
     <input type="text" th:field="*{roles}" id="roles"/>
-    <div style="color:red" th:if="${#fields.hasErrors('roles') }" th:errors="*{roles}">Age error</div>
+    <div style="color:red" th:if="${#fields.hasErrors('roles') }" th:errors="*{roles}">roles error</div>
 
     <br/>
     <br/>

@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.repositories;
 
-
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,7 +36,8 @@ public class UsersRepository {
 
     public User findByUsername(String username) {
 
-        return entityManager.createQuery("select u FROM User u JOIn fETCH u.roles WHERe u.username = :username", User.class)
+        return entityManager.createQuery
+                        ("select u FROM User u JOIn fETCH u.roles WHERe u.username = :username", User.class)
                 .setParameter("username", username)
                 .getResultList().stream().findAny().orElse(null);
     }
@@ -73,7 +73,7 @@ public class UsersRepository {
 
         Optional<User> foundUser = Optional.ofNullable(entityManager.find(User.class, id));
 
-        return foundUser.orElse(new User());
+        return foundUser.orElse(null);
 
     }
 //=====================================================

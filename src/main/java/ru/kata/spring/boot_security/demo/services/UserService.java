@@ -49,13 +49,9 @@ public class UserService implements UserDetailsService {
 
 //==========================saveUser=============================
     @Transactional
-    public boolean save(User user) {
-
-        User userFromDb = usersRepository.findByUsername(user.getUsername());
-        if (userFromDb != null) {return false;}
+    public void save(User user) {
 
         usersRepository.save(user);
-        return  true;
     }
 //===============================================================
     @Transactional
