@@ -65,6 +65,7 @@ public class UserService implements UserDetailsService {
 
         usersRepository.update(updateUser);
     }
+
 //===============================================================
     @Transactional
     public void delete(int id) {

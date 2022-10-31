@@ -64,7 +64,7 @@ public class AdminController {
 
 //====================@PostMapping===================================
 
-    //               СОХРАНЕНИЕ ИЗМЕНЕНИЙ ЮЗЕРА
+    //               Create new user
     @PostMapping()
     public String create(@ModelAttribute("user") @Valid User user,
                          BindingResult bindingResult){
@@ -75,7 +75,7 @@ public class AdminController {
             return "add-new-user";
 
         userService.save(user);
-        return "redirect:/admin";         // REDIRECT переводит на нужную страницу
+        return "redirect:/admin";
     }
 //====================@PatchMapping============================
 
@@ -84,7 +84,7 @@ public class AdminController {
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @PathVariable("id") int id){
 
-        userValidator.validate(user, bindingResult);
+//        userValidator.validate(user, bindingResult);
 
         if(bindingResult.hasErrors())
             return "edit-user";
