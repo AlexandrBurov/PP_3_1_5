@@ -34,8 +34,8 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
         return user;
-    }
 
+    }
 //=========================findUserById===========================
     public User findOne(int id){
 
