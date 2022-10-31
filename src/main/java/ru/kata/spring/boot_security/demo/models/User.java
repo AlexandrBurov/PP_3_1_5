@@ -4,10 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.*;
 
 @Entity
@@ -21,13 +18,13 @@ public class User implements UserDetails{
 
     //----------------------------------------
     @Column(name = "firstname")
-    @NotEmpty(message = "Name should not be empty")
+    @NotBlank(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String firstname;
 
     //----------------------------------------
     @Column(name = "lastname")
-    @NotEmpty(message = "Surname should not be empty")
+    @NotBlank(message = "Surname should not be empty")
     @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters")
     private String lastname;
 
@@ -39,14 +36,14 @@ public class User implements UserDetails{
     //=========================================
 
     @Column(unique = true)
-    @NotEmpty(message = "email should not be empty")
+    @NotBlank(message = "email should not be empty")
     @Email(message = "Email should be valid")
     private String email;
 
 //==================   USERNAME AND PASSWORD   =============================
 
     @Column
-    @NotEmpty(message = "Name should not be empty")
+    @NotBlank(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String username;
 
@@ -133,6 +130,7 @@ public class User implements UserDetails{
 
 //====================ROLE====================
     public List <Role> getRoles() {
+
         return roles;
     }
 
