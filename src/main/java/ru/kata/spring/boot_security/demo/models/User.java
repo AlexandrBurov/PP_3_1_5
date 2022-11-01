@@ -189,5 +189,18 @@ public class User implements UserDetails{
     }
 
 //=========================================================
+public String rolesToString() {
 
+    Role[] roles = getRoles().toArray(new Role[getRoles().size()]);
+
+    StringBuilder rolesList = new StringBuilder();
+
+    for (int i = 0; i < roles.length; i++) {
+
+        rolesList.append(roles[i].toString() + " ");
+    }
+
+    return String.valueOf(rolesList);
+}
+//=========================================================
 }

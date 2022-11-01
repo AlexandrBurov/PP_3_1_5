@@ -63,10 +63,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {// Наст
 //             СВЕРЯЕТ ДАННЫЕ, проверяет по логину и паролю существует ли такой пользователь
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {  //проверяет по логину и паролю существует ли такой пользователь
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(userDetailsService);  //Предоставляет пользователей из userService (по имени пользователя)
+        provider.setUserDetailsService(userDetailsService);
         return provider;
     }
 //==============================================================
