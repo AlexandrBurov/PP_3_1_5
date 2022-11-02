@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 
@@ -13,7 +12,6 @@ import ru.kata.spring.boot_security.demo.repositories.UsersRepository;
 import java.util.*;
 
 @Service
-@Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 
     private final UsersRepository usersRepository;
@@ -49,13 +47,13 @@ public class UserService implements UserDetailsService {
     }
 
 //==========================saveUser=============================
-    @Transactional
+
     public void save(User user) {
 
         usersRepository.save(user);
     }
 //===============================================================
-    @Transactional
+
     public void update(int id, User updateUser){
 
         updateUser.setId(id);
@@ -64,7 +62,7 @@ public class UserService implements UserDetailsService {
     }
 
 //===============================================================
-    @Transactional
+
     public void delete(int id) {
 
         usersRepository.deleteById(id);

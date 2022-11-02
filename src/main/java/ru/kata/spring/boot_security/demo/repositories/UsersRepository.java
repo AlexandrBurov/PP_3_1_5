@@ -15,7 +15,6 @@ import java.util.Optional;
 
 
 @Repository
-@Transactional(readOnly = true)
 public class UsersRepository {
     @PersistenceContext
     private final EntityManager entityManager;
