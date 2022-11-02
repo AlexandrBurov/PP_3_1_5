@@ -10,12 +10,19 @@ import java.util.Optional;
 public interface UserService extends UserDetailsService {
 
     void save(User user);
+
     List<User> findAll();
+
     User findOne(int id);
+
     void update(int id, User updateUser);
+
     void delete(int id);
+
     UserDetails loadUserByUsername(String username);
+
     Optional<User> getUserToEmail (String email);
+
     Optional<User> findUserOptional(String username);
 
 
