@@ -50,7 +50,6 @@ public class UsersRepository {
 
     }
 
-
     @Transactional
     public User update(User user1) {
 
@@ -80,8 +79,6 @@ public class UsersRepository {
         User user = entityManager.find(User.class, contactId);
         entityManager.remove(user);
     }
-
-
 
 //                           Optional<User>
 
