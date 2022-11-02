@@ -31,7 +31,7 @@ public class UsersRepository {
         this.entityManager = entityManager;
         this.roleRepository = roleRepository;
     }
-//====================================================
+
 
     public User findByUsername(String username) {
 
@@ -40,7 +40,7 @@ public class UsersRepository {
                 .setParameter("username", username)
                 .getResultList().stream().findAny().orElse(null);
     }
-//=====================================================
+
     @Transactional
     public void save(User user) {
 
@@ -50,7 +50,7 @@ public class UsersRepository {
 
     }
 
-//=====================================================
+
     @Transactional
     public User update(User user1) {
 
@@ -61,12 +61,12 @@ public class UsersRepository {
 
         return entityManager.merge(user1);
     }
-//=========================getAllUsers=================
+
     public List<User> findAll() {
 
         return entityManager.createQuery("select s from User s", User.class).getResultList();
     }
-//=======================getUserById===================
+
     public User findById(int id) {
 
         Optional<User> foundUser = Optional.ofNullable(entityManager.find(User.class, id));
@@ -74,7 +74,7 @@ public class UsersRepository {
         return foundUser.orElse(null);
 
     }
-//=====================================================
+
     @Transactional
     public void deleteById(int contactId) {
         User user = entityManager.find(User.class, contactId);
@@ -83,7 +83,8 @@ public class UsersRepository {
 
 
 
-//========================Optional<User> ================
+//                           Optional<User>
+
     public Optional<User> getUserByEmail (String email) {
 
         TypedQuery<User> query = entityManager.createQuery
@@ -104,6 +105,6 @@ public Optional<User> findUserOptional(String username) {
 
     return query.getResultStream().findAny();
 
-}
-//=====================================================
+    }
+
 }

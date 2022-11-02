@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-//<<<<<<<<<<<<<<<<<<<<<<<ГЛАВНЫЙ КЛАСС ГДЕ НАСТРАИВАЕТСЯ SPRING SECURITY.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//         ГЛАВНЫЙ КЛАСС ГДЕ НАСТРАИВАЕТСЯ SPRING SECURITY.
 
 //Настройка секьюрности по определенным URL, настройка UserDetails и GrantedAuthority
 
@@ -69,5 +69,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {// Наст
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
-//==============================================================
+
 }

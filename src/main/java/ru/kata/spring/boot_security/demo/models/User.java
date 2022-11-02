@@ -10,37 +10,37 @@ import java.util.*;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails{
-    //=========================================
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //----------------------------------------
+
     @Column(name = "firstname")
     @NotBlank(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String firstname;
 
-    //----------------------------------------
+
     @Column(name = "lastname")
     @NotBlank(message = "Surname should not be empty")
     @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters")
     private String lastname;
 
-    //----------------------------------------
+
     @Column(name = "age")
     @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
-    //=========================================
+
 
     @Column(unique = true)
     @NotBlank(message = "email should not be empty")
     @Email(message = "Email should be valid")
     private String email;
 
-//==================   USERNAME AND PASSWORD   =============================
+//  USERNAME AND PASSWORD
 
     @Column(unique = true)
     @NotBlank(message = "Name should not be empty")
@@ -50,7 +50,7 @@ public class User implements UserDetails{
     @Column(name = "password")
     private String password;
 
-//======================================================================
+
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -59,7 +59,7 @@ public class User implements UserDetails{
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List <Role> roles;
 
-//====================================================================
+
 
     public User(){}
 
@@ -76,7 +76,6 @@ public class User implements UserDetails{
 
     }
 
-    //===========================================
 
     public int getId() {
         return id;
@@ -118,7 +117,7 @@ public class User implements UserDetails{
         this.email = email;
     }
 
-//=============================================
+//                USERNAME & PASSWORD
 
     public void setUsername(String username) {
         this.username = username;
@@ -128,7 +127,8 @@ public class User implements UserDetails{
         this.password = password;
     }
 
-//====================ROLE====================
+//                        ROLE
+
     public List <Role> getRoles() {
 
         return roles;
@@ -148,7 +148,7 @@ public class User implements UserDetails{
         roles.add(role);
     }
 
-//<<<<<<<<<<<<<<<<<<<<UserDetails>>>>>>>>>>>>>>>>>>>>
+//                     UserDetails
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -166,7 +166,7 @@ public class User implements UserDetails{
 
         return password;
     }
-//<<<<<<<<<<<<<<<<<<<<UserDetails_TRUE>>>>>>>>>>>>>>>>>>>>
+//                  UserDetails_TRUE
 
     @Override
     public boolean isAccountNonExpired() {
@@ -188,7 +188,8 @@ public class User implements UserDetails{
         return true;
     }
 
-//=========================================================
+//                rolesToString
+
 public String rolesToString() {
 
     Role[] roles = getRoles().toArray(new Role[getRoles().size()]);
@@ -202,5 +203,5 @@ public String rolesToString() {
 
     return String.valueOf(rolesList);
 }
-//=========================================================
+
 }

@@ -21,7 +21,7 @@ public class Role implements GrantedAuthority {
     private List <User> users;
 
 
-//==================================================================
+
     public Role(){}
 
     public Role(int id) {
@@ -37,7 +37,7 @@ public class Role implements GrantedAuthority {
         this.users = users;
     }
 
-//==================================================================
+
 
     public int getId() {
         return id;
@@ -55,7 +55,8 @@ public class Role implements GrantedAuthority {
         this.name = name;
     }
 
-//=====================Set<User>=============================
+//                     List<User>
+
     public List <User> getUsers() {
         return users;
     }
@@ -74,18 +75,18 @@ public class Role implements GrantedAuthority {
         users.add(user);
     }
 
-//=====================GrantedAuthority=============================
+//               GrantedAuthority
     @Override
     public String getAuthority() {
         return getName();
 }
 
-//==================================================================
+
     @Override
     public String toString() {
 
         return id == 1 ? "USER" : "ADMIN";
     }
 
-//==================================================================
+
 }
