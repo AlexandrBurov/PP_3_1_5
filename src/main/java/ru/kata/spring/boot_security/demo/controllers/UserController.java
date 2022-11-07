@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+import java.security.Principal;
+
 
 @Controller
 @RequestMapping()
@@ -25,10 +27,10 @@ public class UserController {
 //          ОТОБРАЖАЕТСЯ ЮЗЕР СО ВСЕМИ ПОЛЯМИ
 
     @GetMapping("/user")
-    public String getUserPage(Authentication authentication, Model model) {
-        User user = (User) authentication.getPrincipal();
-        model.addAttribute("user", userService.loadUserByUsername(user.getUsername()));
-        return "user";
+    public String getUserPage(Principal principal, Model model) {
+        User user = (User) userService.loadUserByUsername(principal.getName());
+        model.addAttribute("user", user);
+        return "/user";
     }
 
 

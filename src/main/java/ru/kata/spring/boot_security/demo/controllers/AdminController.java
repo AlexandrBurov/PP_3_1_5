@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,58 +14,70 @@ import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 
-
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-    private  UserValidator userValidator;
-    private  UserService userService;
+    private  final UserValidator userValidator;
+    private  final UserService userService;
     private  RoleService roleService;
     @Autowired
     public AdminController(UserService userService, UserValidator userValidator, RoleService roleService) {
         this.userService = userService;
         this.userValidator = userValidator;
         this.roleService = roleService;
+
     }
 
 
-
-    //            СТАРТОВАЯ СТРАНИЦА СО ВСЕМИ ЮЗЕРАМИ
+//                  ВСЕ ЮЗЕРЫ
 
     @GetMapping()
-    public String index(Model model) {
+    public String index(Model model,@AuthenticationPrincipal User currentUser) {
+        model.addAttribute("createUser", new User());
         model.addAttribute("users", userService.findAll());
-        return "admin-page";
+
+        model.addAttribute("currentUser", currentUser);
+        return "admin";
     }
 
 
-    //      ОТОБРАЖАЕТСЯ ЮЗЕР СО ВСЕМИ ПОЛЯМИ И КНОПКОЙ УДАЛЕНИЯ
+//           ЮЗЕР СО ВСЕМИ ПОЛЯМИ
+
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model){
+
         model.addAttribute("user", userService.findOne(id));
-        return "delete-user";
+        return "admin";
     }
 
 
-    //           СТРАНИЦА С СОЗДАНИЕМ НОВОГО ЮЗЕРА
+//           РЕДАКТИРОВАНИЯ ЮЗЕРА
 
-    @GetMapping("/new")
+
+    @GetMapping("/{id}/edit")
+    public String edit( @PathVariable("id") int id, Model model){
+
+        model.addAttribute("user", userService.findOne(id));
+        return "admin";
+    }
+
+
+
+//            СТРАНИЦА С СОЗДАНИЕМ НОВОГО ЮЗЕРА
+
+
+   @PostMapping("/new")
     public String newUser(@ModelAttribute("user") User user){  // @ModelAttribute помещает user без параметров
 
-        return "add-new-user";}
-
-
-    //           СТРАНИЦА ДЛЯ РЕДАКТИРОВАНИЯ ЮЗЕРА
-    @GetMapping("/{id}/edit")
-    public String edit(Model model, @PathVariable("id") int id){
-        model.addAttribute("user", userService.findOne(id));
-        return "edit-user";
+        userService.save(user);
+        return "redirect:/admin";
     }
 
 
-    //               CREATE NEW USER
+
+//                NEW USER
 
     @PostMapping()
     public String create(@ModelAttribute("user") @Valid User user,
@@ -73,32 +86,34 @@ public class AdminController {
         userValidator.validate(user, bindingResult);
 
         if(bindingResult.hasErrors())
-            return "add-new-user";
+            return "admin";
 
         userService.save(user);
         return "redirect:/admin";
     }
 
 
-    //                  ОБНОВЛЯЕМ  ЮЗЕРА
+//                    ИЗМЕНИТЬ ЮЗЕРА
 
     @PatchMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @PathVariable("id") int id){
 
-        userValidator.validate(user, bindingResult);
-
         if(bindingResult.hasErrors())
-            return "edit-user";
+            return "admin";
 
         userService.update(id, user);
         return "redirect:/admin";
     }
 
+
+
 //                   УДАЛЕНИЕ ЮЗЕРА
 
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+   @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id, Model model) {
+
+        model.addAttribute("user", userService.findOne(id));
         userService.delete(id);
         return "redirect:/admin";
     }
