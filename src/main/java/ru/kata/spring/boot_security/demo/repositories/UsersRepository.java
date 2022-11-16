@@ -34,7 +34,6 @@ public class UsersRepository {
 
 
     public User findByUsername(String username) {
-
         return entityManager.createQuery
                         ("select u FROM User u JOIn fETCH u.roles WHERe u.username = :username", User.class)
                 .setParameter("username", username)
@@ -43,35 +42,26 @@ public class UsersRepository {
 
     @Transactional
     public void save(User user) {
-
         user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
-
         entityManager.persist(user);
-
     }
 
     @Transactional
     public User update(User user1) {
-
         User user2 = findById(user1.getId());
         if(!user2.getPassword().equals(user1.getPassword())) {
             user1.setPassword(bCryptPasswordEncoder().encode(user2.getPassword()));
         }
-
         return entityManager.merge(user1);
     }
 
     public List<User> findAll() {
-
         return entityManager.createQuery("select s from User s", User.class).getResultList();
     }
 
     public User findById(int id) {
-
         Optional<User> foundUser = Optional.ofNullable(entityManager.find(User.class, id));
-
         return foundUser.orElse(null);
-
     }
 
     @Transactional
@@ -80,7 +70,7 @@ public class UsersRepository {
         entityManager.remove(user);
     }
 
-//                           Optional<User>
+// Optional
 
     public Optional<User> getUserByEmail (String email) {
 
@@ -93,7 +83,7 @@ public class UsersRepository {
 
     }
 
-public Optional<User> findUserOptional(String username) {
+    public Optional<User> findUserOptional(String username) {
 
     TypedQuery<User> query = entityManager.createQuery
                     ("SELECT u FROM User u WHERE u.username = :username", User.class);
@@ -104,4 +94,5 @@ public Optional<User> findUserOptional(String username) {
 
     }
 
+// close
 }

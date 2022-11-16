@@ -18,39 +18,37 @@ public class User implements UserDetails{
 
 
     @Column(name = "firstname")
-    @NotBlank(message = "Name should not be empty")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+//    @NotBlank(message = "Name should not be empty")
+//    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String firstname;
 
 
     @Column(name = "lastname")
-    @NotBlank(message = "Surname should not be empty")
-    @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters")
+//    @NotBlank(message = "Surname should not be empty")
+//    @Size(min = 2, max = 30, message = "Surname should be between 2 and 30 characters")
     private String lastname;
 
 
     @Column(name = "age")
-    @Min(value = 0, message = "Age should be greater than 0")
+//    @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
 
 
-    @Column(unique = true)
-    @NotBlank(message = "email should not be empty")
-    @Email(message = "Email should be valid")
+    @Column(name = "email")
+//    @NotBlank(message = "email should not be empty")
+//    @Email(message = "Email should be valid")
     private String email;
 
 //  USERNAME AND PASSWORD
 
-    @Column(unique = true)
-    @NotBlank(message = "Name should not be empty")
-    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @Column(name = "username")
+//    @NotBlank(message = "Name should not be empty")
+//    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String username;
 
     @Column(name = "password")
     private String password;
-
-
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -58,7 +56,6 @@ public class User implements UserDetails{
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List <Role> roles;
-
 
 
     public User(){}

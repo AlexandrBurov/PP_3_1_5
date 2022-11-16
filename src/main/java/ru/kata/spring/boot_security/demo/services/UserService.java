@@ -2,6 +2,7 @@ package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.models.User;
 
 import java.util.List;
@@ -18,6 +19,10 @@ public interface UserService extends UserDetailsService {
     void update(int id, User updateUser);
 
     void delete(int id);
+
+     User convertToUser(UserDTO userDTO);
+
+    UserDTO convertToUserDTO(User user);
 
     UserDetails loadUserByUsername(String username);
 

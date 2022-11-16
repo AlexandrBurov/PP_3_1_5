@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +29,7 @@ public class UserController {
     public String getUserPage(Principal principal, Model model) {
         User user = (User) userService.loadUserByUsername(principal.getName());
         model.addAttribute("user", user);
-        return "/user";
+        return "/user2";
     }
 
 
